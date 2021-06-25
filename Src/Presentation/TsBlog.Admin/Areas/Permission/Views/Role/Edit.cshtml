@@ -1,0 +1,100 @@
+﻿@model TsBlog.Domain.Entities.Role
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+    <link href="~/Content/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <form class="layui-form" action="" style="padding-top:25px;">
+        @Html.HiddenFor(m => m.Id)
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">角色代码:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="RoleCode" lay-verify="required" placeholder="请输入角色代码" value="@Model.RoleCode" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">角色名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="RoleName" lay-verify="required" placeholder="请输入角色名称" value="@Model.RoleName" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态:</label>
+                <div class="layui-input-inline">
+                    @if (Model.Status)
+                    {
+                        <input type="radio" name="Status" value="true" title="启用" checked />
+                        <input type="radio" name="Status" value="false" title="禁用" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="Status" value="true" title="启用" />
+                        <input type="radio" name="Status" value="false" title="禁用" checked />
+                    }
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">备注:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="Remark" value="@Model.Remark" placeholder="请输入备注" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align:right;padding-right:46px;">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="saveForm">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="btn_cancel">取消</button>
+            </div>
+        </div>
+    </form>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer', 'element', 'table', 'laytpl', 'util', 'jquery'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            var element = layui.element;
+            var table = layui.table;
+            var laytpl = layui.laytpl;
+            var util = layui.util;
+            var $ = layui.jquery;
+
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+            form.on('submit(saveForm)', function (data) {
+                $.ajax({
+                    url: '/Permission/Role/Edit',
+                    type: 'post',
+                    data: data.field,
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.code == 1) {
+                            parent.layer.msg(res.tip, { icon: 1 });
+                            parent.layer.close(index);
+                            parent.layui.table.reload('tbRole');
+                        }
+                        else
+                            layer.msg(res.tip, { icon: 2 });
+                    }
+                })
+                return false;
+            })
+
+            $('#btn_cancel').click(function () {
+                parent.layer.close(index);
+            })
+        })
+    </script>
+</body>
+</html>

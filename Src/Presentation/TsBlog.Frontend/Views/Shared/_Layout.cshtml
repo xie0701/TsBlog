@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>@ViewBag.Title</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900%7CPoppins:300,400,500,600,700" rel="stylesheet">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Content/animate.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/responsive.css" rel="stylesheet" />
+</head>
+<body class="blue-primary-color">
+    <header class="header-area">
+        @Html.Partial("_Header")
+    </header>
+    <section class="slider-section blue-slider">
+        @Html.Partial("_Slider")
+    </section>
+    <section class="main-content home-one-main-content">
+        @RenderBody()
+    </section>
+    <footer class="blue-bg main-footer no-margin">
+        <div class="container">
+            <div class="footer-logo">TsBlog!</div>
+        </div>
+    </footer>
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.nicescroll.min.js"></script>
+    <script src="~/Scripts/bootstrap-rating.min.js"></script>
+    <script src="~/Scripts/jquery.matchHeight-min.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+    <div id="ascrail2000" class="nicescroll-rails nicescroll-rails-vr" style="width: 0px; z-index: 9999; cursor: default; position: fixed; top: 0px; left: 0px; height: 719px; display: block; opacity: 0;">
+        <div class="nicescroll-cursors" style="position: relative; top: 0px; float: right; width: 0px; height: 343px; background-color: rgb(148, 197, 1); border: 0px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 0px;"></div>
+    </div>
+    <div id="ascrail2000-hr" class="nicescroll-rails nicescroll-rails-hr" style="height: 0px; z-index: 9999; top: 719px; left: -365px; position: fixed; cursor: default; display: none; width: 365px; opacity: 0;">
+        <div class="nicescroll-cursors" style="position: absolute; top: 0px; height: 0px; width: 365px; background-color: rgb(148, 197, 1); border: 0px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 0px;"></div>
+    </div>
+</body>
+</html>

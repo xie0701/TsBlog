@@ -1,0 +1,128 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <link href="~/Content/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <form class="layui-form" action="" style="padding-top:25px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级菜单:</label>
+            <div class="layui-input-inline">
+                <select name="ParentId" id="topMenu">
+                    <option value="0"></option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">若没有上级菜单可不选择</div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">菜单名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="MenuName" lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">菜单图标:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="Icon" id="menuIcon" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">菜单状态:</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="Status" value="true" title="启用" checked />
+                    <input type="radio" name="Status" value="false" title="禁用" />
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">排序号:</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="OrderNo" lay-verify="required" autocomplete="off" placeholder="请输入排序号" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单路径:</label>
+            <div class="layui-input-block" style="width:514px">
+                <input type="text" name="MenuUrl" lay-verify="required" autocomplete="off" placeholder="请输入菜单路径" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="saveForm">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="btn_cancel" >取消</button>
+            </div>
+        </div>
+    </form>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '/Content/layui/extend/'
+        }).use(['form', 'element', 'layer', 'jquery', 'iconPicker'], function () {
+            var form = layui.form;
+            var element = layui.element;
+            var layer = layui.layer;
+            var $ = layui.jquery;
+            var iconPicker = layui.iconPicker;
+
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+            iconPicker.render({
+                elem: '#menuIcon',
+                type: 'fontClass',
+                search: true,
+                page: true,
+                limit: 6,
+                cellWidth: '48px'
+            })
+
+            $.ajax({
+                url: '/Permission/Menu/GetTopMenu',
+                dataType: 'json',
+                type: 'get',
+                success: function (result) {
+                    $.each(result.data, function (index, value) {
+                        $('#topMenu').append(new Option(value.MenuName, value.Id));
+                    })
+                    form.render('select');
+                }
+            })
+
+            form.on('submit(saveForm)', function (data) {
+                var para = data.field;
+                $.ajax({
+                    url: '/Permission/Menu/Add',
+                    data: para,
+                    dataType: 'json',
+                    type: 'post',
+                    success: function (res) {
+                        if (res.code == 1) {
+                            parent.layer.msg(res.tip, { icon: 1 });
+                            parent.layer.close(index);
+                            parent.layui.treeTable.reload('tbMenu');
+                        }
+                        else
+                            layer.msg(res.tip, { icon: 2 });
+                    }
+                })
+                return false;
+            })
+
+            $('#btn_cancel').click(function () {
+                parent.layer.close(index);
+            })
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+﻿@*@model TsBlog.Domain.Entities.Post*@
+@model TsBlog.ViewModel.Post.PostViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.Title;
+}
+
+<article>
+    <p>Post id:@Model.Id</p>
+    <p>Post Title:@Model.Title</p>
+    <p>Post PublishedAt:@Model.PublishedAt</p>
+    <p>Post IsDeleted:@Model.IsDeleted</p>
+</article>
+

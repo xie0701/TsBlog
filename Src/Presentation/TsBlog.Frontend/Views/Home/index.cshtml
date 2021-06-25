@@ -1,0 +1,46 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IEnumerable<TsBlog.ViewModel.Post.PostViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "首页";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 ">
+            @foreach (var p in Model)
+            {
+                <div class="blog-layout-one blog-item1">
+                    <div class="overlay"></div>
+                    <div class="text">
+                        <h3><a href="~/Post/Details/@p.Id">@p.Title </a></h3>
+                        <div class="meta-info">
+                            <span>By <a href="#">@p.AuthorName</a></span>
+                            <span>In <a href="#">News</a></span>
+                            <span><a href="#">Comment 2</a></span>
+                        </div>
+                    </div>
+                    <div class="right-read-more">
+                        <a href="~/Post/Details/@p.Id" class="read-more"><span class="icon-arrow-thin-right"></span></a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.PagedListPager((IPagedList)ViewBag.Pagination, page => Url.Action("index", new { page }), new PagedListRenderOptions
+            {
+                LinkToFirstPageFormat = "首页",
+                LinkToPreviousPageFormat = "上一页",
+                LinkToNextPageFormat = "下一页",
+                LinkToLastPageFormat = "末页",
+                DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+                DisplayLinkToLastPage = PagedListDisplayMode.Never,
+                DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                MaximumPageNumbersToDisplay = 5
+            })
+        </div>
+    </div>
+</div>

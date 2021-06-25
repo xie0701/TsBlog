@@ -1,0 +1,225 @@
+﻿@model TsBlog.Core.Operator.OperatorInfo
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
+    <link href="~/Content/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">
+                应用程序名称
+            </div>
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item">
+                    @Html.ActionLink("主页", "Index", "Home")
+                </li>
+                <li class="layui-nav-item">@Html.ActionLink("关于", "About", "Home")</li>
+                <li class="layui-nav-item">@Html.ActionLink("联系方式", "Contact", "Home")</li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    @Html.ActionLink(Model.UserName, "Manage", "Account", routeValues: null, htmlAttributes: new { title = "管理" })
+                    <a href="javascript:;" title="管理"><span class="layui-nav-more layui-nav-mored"></span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a id="password_change" href="javascript:;">修改密码</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="/Login/LoginOff">注销</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <ul class="layui-nav layui-nav-tree " id="navTest" lay-filter="demo"></ul>
+            </div>
+        </div>
+
+        <div class="layui-body" style="padding:5px">
+            <div class="layui-tab layui-tab-brief" lay-filter="test" lay-allowclose="true">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" lay-id="2">
+                        @*<i class="iconfont icon-zhuye" aria-hidden="true"></i>*@
+                        控制台
+                    </li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <iframe id="bi_iframe" data-frameid="1" frameborder="0" style="min-height:580px;" scrolling="no" width="100%" src="/Admin/Home/Console"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-footer">
+            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
+        </div>
+    </div>
+    <div id="change_password" style="display:none; width:350px; margin:auto; padding-top:30px;">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-form-required">原始密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="OldPassword" placeholder="请输入原始密码" class="layui-input" lay-verify="pass" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-form-required">新密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="NewPassword" placeholder="请输入新密码" class="layui-input" lay-verify="pass|newPass" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-form-required">确认密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="RePassword" placeholder="请再次输入新密码" class="layui-input" lay-verify="pass|confirmPass" />
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align:right">
+                <button type="button" id="btn_cancel" class="layui-btn layui-btn-primary">取消</button>
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="reset">保存</button>
+            </div>
+        </form>
+    </div>
+    <script id="sideNav" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+        <li class="layui-nav-item">
+            <a href="{{ item.Url }}">
+                <i class="layui-icon {{ item.Icon }}"></i>&emsp;<cite>{{ item.Name }}</cite>
+            </a>
+            {{# if(item.subMenus&&item.subMenus.length>0) { getSubMenus(item.subMenus); } }}
+        </li>
+        {{# }); }}
+        {{# function getSubMenus(subMenus){ }}
+        <dl class="layui-nav-child">
+            {{# layui.each(subMenus, function(index, subItem){ }}
+            <dd>
+                <a data-id="{{ subItem.Id }}" data-url="{{ subItem.Url }}" data-title="{{ subItem.Name }}" data-type="addTab" href="javascript:;">
+                    {{# if(subItem.Icon){ }}
+                    <i class="layui-icon {{ subItem.Icon }}"></i>&emsp;
+                    {{# } }}
+                    {{ subItem.Name }}
+                </a>
+                {{# if(subItem.subMenus&&subItem.subMenus.length>0) { getSubMenus(subItem.subMenus); } }}
+            </dd>
+            {{# }); }}
+        </dl>
+        {{# } }}
+    </script>
+    <script src="~/Content/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer', 'element', 'laytpl', 'jquery'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            var element = layui.element;
+            var $ = layui.jquery;
+            var laytpl = layui.laytpl;
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+            var active = {
+                tabAdd: function (title, url, id) {
+                    var iframe = '<iframe id="bi_iframe" data-frameid="' + id + '" frameborder="0" style="min-height:555px;" scrolling="no" width="100%" src="' + url + '"></iframe>';
+                    element.tabAdd('test', {
+                        title: title,
+                        content: iframe,
+                        id: id,
+                    })
+                    setIframeHeight(document.getElementById('bi_iframe'))
+                },
+                tabDelete: function (id) {
+                    element.tabDelete('test', id);
+                },
+                tabChange: function (id) {
+                    element.tabChange('test', id);
+                    //$("iframe[data-frameid='" + id + "']").attr("src", $("iframe[data-frameid='" + id + "']").attr("src"));
+                }
+            }
+
+            $("#password_change").click(function () {
+                layer.open({
+                    type: 1,
+                    area: ['460px', '300px'],
+                    title: '修改密码',
+                    content: $("#change_password"),
+                    shade: 0
+                })
+            })
+
+            form.verify({
+                pass: [
+                    /^[\S]{6,12}$/,
+                    '密码必须6到12位，且不能有空格'
+                ],
+                newPass: function (value) {
+                    if ($('input[name=OldPassword]').val() === value)
+                        return '新旧密码不能相同！';
+                },
+                confirmPass: function (value) {
+                    if ($('input[name=NewPassword]').val() !== value)
+                        return '两次密码输入不一致！';
+                }
+            })
+
+            form.on('submit(reset)', function (data) {
+                $.post('/Login/ResetPassword', data.field, function (res) {
+                    if (res.Code === 1)
+                        layer.msg(res.Message, { title: '提示', icon: 1 });
+                    else
+                        layer.msg(res.Message, { title: '提示', icon: 2 });
+                })
+                return false;
+            });
+
+            function setIframeHeight(iframe) {
+                if (iframe) {
+                    var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+                    if (iframeWin.document.body) {
+                        iframe.height = iframeWin.document.body.scrollHeight;
+                    }
+                }
+            };
+
+            $('#btn_cancel').click(function () {
+                layer.close(layer.index);
+            })
+
+            $.get('/Admin/Home/GetMenuInfo', function (res) {
+
+                var getTpl = sideNav.innerHTML;
+                var view = document.getElementById('navTest');
+
+                var list = res.Data.menuTree;
+                laytpl(getTpl).render(list, function (html) {
+                    view.innerHTML = html;
+                })
+                element.render('nav(demo)');
+            });
+
+            element.on('nav(demo)', function (elem) {
+                var othis = $(this);
+                if (othis.attr('data-type') === undefined) return;
+                if ($('.layui-tab-title li[lay-id]').length <= 0)
+                    active.tabAdd(othis.attr("data-title"), othis.attr("data-url"), othis.attr("data-id"));
+                else {
+                    var isData = false;
+                    $.each($('.layui-tab-title li[lay-id]'), function () {
+                        if ($(this).attr("lay-id") == othis.attr("data-id"))
+                            isData = true;
+                    })
+                    if (isData == false)
+                        active.tabAdd(othis.attr("data-title"), othis.attr("data-url"), othis.attr("data-id"));
+                }
+                active.tabChange(othis.attr("data-id"));
+            });
+
+            $(window).resize(function () {
+                setIframeHeight(document.getElementById('bi_iframe'))
+            })
+        })
+    </script>
+</body>
+</html>

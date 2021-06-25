@@ -1,0 +1,138 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Console</title>
+    <link href="~/Content/layui/css/layui.css" rel="stylesheet" />
+    <style>
+        .console-link-block {
+            position: relative;
+            background-color: #b6ff00;
+            font-size: 16px;
+            padding: 20px 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+        }
+
+            .console-link-block .console-link-block-num {
+                font-size: 28px;
+                margin-bottom: 5px;
+            }
+
+            .console-link-block .console-link-block-icon {
+                position: absolute;
+                top: 24%;
+                right: 15px;
+                font-size: 50px;
+                line-height: 50px;
+                color: #a4a3a3;
+            }
+    </style>
+</head>
+<body>
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-lg4 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_ServerName"></div>
+                <div class="console-link-block-text">服务器名称</div>
+                <i class="console-link-block-icon layui-icon layui-icon-template-1"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg4 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_OperatingSystem"></div>
+                <div class="console-link-block-text">操作系统</div>
+                <i class="console-link-block-icon layui-icon layui-icon-windows"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_ProcessorCount"></div>
+                <div class="console-link-block-text">CPU核心数</div>
+                <i class="console-link-block-icon layui-icon layui-icon-app"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_RamUse"></div>
+                <div class="console-link-block-text">内存占用</div>
+                <i class="console-link-block-icon"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg4 layui-col-sm6 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_IpLocation"></div>
+                <div class="console-link-block-text">IP位置</div>
+                <i class="console-link-block-icon layui-icon layui-icon-location"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_LanIP"></div>
+                <div class="console-link-block-text">局域网IP</div>
+                <i class="console-link-block-icon"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_PublicIP"></div>
+                <div class="console-link-block-text">公网IP</div>
+                <i class="console-link-block-icon"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_SystemFramework"></div>
+                <div class="console-link-block-text">系统架构</div>
+                <i class="console-link-block-icon"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block">
+                <div class="console-link-block-num" id="console_FrameworkVersion"></div>
+                <div class="console-link-block-text">.NET版本</div>
+                <i class="console-link-block-icon"></i>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-sm4 layui-col-xs6">
+                <div class="console-link-block" style="margin-bottom:20px">
+                    <div class="console-link-block-num" id="console_StartDate"></div>
+                    <div class="console-link-block-text">启动时间</div>
+                    <i class="console-link-block-icon layui-icon layui-icon-date"></i>
+                </div>
+                <div class="console-link-block">
+                    <div class="console-link-block-num" id="console_StartTime"></div>
+                    <div class="console-link-block-text">运行时间</div>
+                    <i class="console-link-block-icon layui-icon layui-icon-time"></i>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-xs12"></div>
+            <div class="layui-col-sm4 layui-col-xs12"></div>
+        </div>
+    </div>
+    <script src="~/Content/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer', 'element', 'jquery'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            var element = layui.element;
+            var $ = layui.jquery;
+
+            $.get('/Admin/Home/GetServerInfo', function (res) {
+                for (var key in res.Data) {
+                    //alert(key);
+                    $("#console_" + key).html(res.Data[key]);
+                }
+            });
+        })
+    </script>
+</body>
+</html>

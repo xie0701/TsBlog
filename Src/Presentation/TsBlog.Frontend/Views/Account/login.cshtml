@@ -1,0 +1,70 @@
+﻿@model TsBlog.ViewModel.User.LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>系统登录</title>
+    <link href="~/Content/Account/account.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="account-container">
+        <div class="account-modal-container">
+            <div class="modal"></div>
+            <div class="load-bar-container">
+                <div class="load-bar">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+            <div class="account-signin-container">
+                <h1>用户登录</h1>
+                @using (Html.BeginForm("login", "account", FormMethod.Post, new { @class = "account-form", role = "form" }))
+                {
+                    @Html.ValidationMessage("error_message", new { @class = "error" })
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label>
+                            <span>登录名:</span>
+                            @Html.TextBoxFor(m => m.UserName, new { placeholder = "请输入登录名" })
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "error" })
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span>密码:</span>
+                            @Html.PasswordFor(m => m.Password, new { placeholder = "请输入密码" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>验证码:</label>
+                        <div style="display:flex">
+                            @Html.TextBoxFor(m => m.ValidCode, new { placeholder = "请输入验证码" })
+                            <img id="validCodeImg" style="margin-top:5px;" src="/Account/CreateValidCode" />
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ValidCode, "", new { @class = "error" })
+                    </div>
+                    <div class="form-group">
+                        <button id="btn_login" type="submit">登 录</button>
+                        <a class="a_register" href="~/account/register">注 册</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $("#validCodeImg").click(function () {
+            $(this).prop("src", "/Account/CreateValidCode?t=" + new Date().getTime())
+        })
+    </script>
+</body>
+</html>
