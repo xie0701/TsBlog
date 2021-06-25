@@ -24,7 +24,7 @@ namespace TsBlog.Admin.Areas.Permission.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRoleList(string? RoleName)
+        public JsonResult GetRoleList(string RoleName)
         {
             var roleList = _roleService.GetRoleList(RoleName);
             DataResult<object> result = new DataResult<object>();

@@ -9,6 +9,6 @@ namespace TsBlog.Services
 {
     public interface IRoleService : IService<Role>
     {
-        List<Role> GetRoleList(string? roleName);
+        List<Role> GetRoleList(string roleName);
     }
 }

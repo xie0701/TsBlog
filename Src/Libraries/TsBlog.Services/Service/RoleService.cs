@@ -17,13 +17,13 @@ namespace TsBlog.Services
             _repository = repository;
         }
 
-        public List<Role> GetRoleList(string? roleName)
+        public List<Role> GetRoleList(string roleName)
         {
             List<Role> roleList;
-            if (string.IsNullOrEmpty(roleName.Value))
+            if (string.IsNullOrEmpty(roleName))
                 roleList = _repository.FindAll().ToList();
             else
-                roleList = _repository.FindListByClause(r => r.RoleName == roleName.Value).ToList();
+                roleList = _repository.FindListByClause(r => r.RoleName == roleName).ToList();
 
             return roleList;
         }
